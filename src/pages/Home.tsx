@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 
 import { Header } from '../components/Header';
-import { Task, TasksList } from '../components/TasksList';
+import { Task, ChangeTask, TasksList } from '../components/TasksList';
 import { TodoInput } from '../components/TodoInput';
 
 export function Home() {
@@ -70,6 +70,18 @@ export function Home() {
     );
   }
 
+  function handleEditTask({ taskId, taskNewTitle}: ChangeTask) {
+    const updatedTask = tasks.map(task => ({ ...task }));
+
+    const foundItem = updatedTask.find(item => item.id === taskId);
+
+    if(!foundItem)
+      return;
+
+    foundItem.title = taskNewTitle;
+    setTasks(updatedTask);
+  }
+
   return (
     <View style={styles.container}>
       <Header tasksCounter={tasks.length} />
@@ -80,6 +92,7 @@ export function Home() {
         tasks={tasks} 
         toggleTaskDone={handleToggleTaskDone}
         removeTask={handleRemoveTask} 
+        editTask={handleEditTask}
       />
     </View>
   )
